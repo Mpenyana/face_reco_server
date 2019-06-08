@@ -24,23 +24,21 @@ app.get('/', (req, res) => {
 	res.json(database.users)
 })
 
-
-// bcrypt.hash("bacon", null, null, function(err, hash) {
-//   // Store hash in your password DB.
-// });
-
-// // Load hash from your password DB.
-// bcrypt.compare("bacon", hash, function(err, res) {
-//     // res == true
-// });
-// bcrypt.compare("veggies", hash, function(err, res) {
-//     // res = false
-// });
-
-
-
 app.post('/signin', (req, res) => {
-	
+	db.select('*').from('login')
+	.where('email', '=', req.body.email)
+	.then(user => {
+		const isValid = bcrypt.compareSync(req.body.password, user[0].hash); // true
+		if(isValid){
+			return db.select('*').from('users').where('email', '=', req.body.email)
+		}
+		else{
+			res.json('Incorrect details entered.')
+		}
+	})
+	.then(userInfo => {
+		res.json(userInfo[0])
+	})
 })
 
 
@@ -63,26 +61,29 @@ app.put('/image', (req, res) =>{
 	db('users')
 	  .where('id', '=', id)
 	  .increment('entries', 1)
+	  .returning('entries')
 	  .then(entries => {
 	  	res.json(entries)
+	  	console.log(entries[0])
 	  })
 	  .catch(err => {res.status(400).json('Error getting entries')})
 })
 
 app.post('/register', (req, res) =>{
 	const {name, email, password} = req.body
+	const hash = bcrypt.hashSync(password);
 	db.transaction(trx => {
 		trx.insert({
 			email: email,
-			hash: password
+			hash: hash
 		}).into('login')
 		.returning('email')
 		.then(loginEmail => {
 			return trx('users')
 			.returning('*')
 			.insert({
-				name: loginEmail[0],
-				email: email,
+				name: name,
+				email: loginEmail[0],
 				joined: new Date()
 			}).then(user => res.json(user[0]))
 				.catch(err => res.json('Unable to register'));
