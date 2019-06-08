@@ -1,1 +1,1 @@
-# face_reco_api
+# face_reco_server
