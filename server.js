@@ -15,6 +15,7 @@ const db = knex({
   connection: {
     host : '127.0.0.1',
     user : 'postgres',
+    ssl: true,
     password : 'VTMNKCMT2real',
     database : 'face_reco_db'
   }
@@ -22,8 +23,8 @@ const db = knex({
 
 
 const app = express();
-app.use(cors())
-app.use(bodyParser.json())
+app.use(cors());
+app.use(bodyParser.json());
 
 // home/test route
 app.get('/', (req, res) => {
