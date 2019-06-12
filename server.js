@@ -13,11 +13,11 @@ const image = require('./controllers/image');
 const db = knex({
   client: 'pg',
   connection: {
-    host :'there is nothing for now',
-    user : 'postgres',
-    ssl: true,
-    password : 'VTMNKCMT2real',
-    database : 'face_reco_db'
+    connectionString: process.env.DATABASE_URL,
+    ssl: true
+    // user : 'postgres',
+    // password : 'VTMNKCMT2real',
+    // database : 'face_reco_db'
   }
 });
 
