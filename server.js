@@ -27,7 +27,7 @@ app.use(bodyParser.json())
 
 // home/test route
 app.get('/', (req, res) => {
-	res.json(database.users)
+	res.json('testing')
 })
 
 // application's routes
@@ -38,6 +38,7 @@ app.put('/image', (req, res) => {image.imageHandler(req, res, db)})
 app.post('APIHandler', (req, res) => {API.APIHandler(req, res)})
 
 // setting port number
-app.listen(3000, ()=>{
-	console.log('Ahoy! Do code!')
+const PORT = process.env.PORT;
+app.listen(PORT, ()=>{
+	console.log(`server listening to port: ${PORT}`)
 })
