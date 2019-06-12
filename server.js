@@ -13,7 +13,7 @@ const image = require('./controllers/image');
 const db = knex({
   client: 'pg',
   connection: {
-    host : '127.0.0.1',
+    host : 'this is where the error is',
     user : 'postgres',
     ssl: true,
     password : 'VTMNKCMT2real',
